@@ -35,11 +35,7 @@ k1r = 2 # k₋₁
 
 # Input: Reaction Params
 duration = 6 # min
-step = 1 # min
-time = [t for t in range(0, duration+step, step)]
-k = 0.4 # Rate cst (1/s)
-vol = 1 # Volume (L)
-
+step = 0.05 # min
 
 
 # ========================================================================================
@@ -50,13 +46,9 @@ fn = Functions(duration=duration, timeStep=step)
 data = fn.complexFormation(
     concE=E, concS=S, concES=ES, rateF=k1, rateR=k1r
 )
-concE = data['E']
-concS = data['S']
-concES = data['ES']
 
 # Plot data
 fn.plotLines(
     data=data, labelX='Time', labelY='Concentration (mol/L)',
     title='Reaction Kinetics', colors=['black', '#20BB20', '#7700AA']
 )
-

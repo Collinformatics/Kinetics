@@ -7,6 +7,12 @@ import pandas as pd
 import sys
 
 
+# Set options
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
+pd.set_option('display.float_format', '{:,.3f}'.format)
+
+
 def pressKey(event):
     if event.key == 'escape':
         plt.close()
@@ -19,7 +25,7 @@ def pressKey(event):
 
 class Functions:
     def __init__(self, duration, timeStep):
-        self.time = [t for t in range(0, duration+timeStep, timeStep)]
+        self.time = np.arange(0, duration+timeStep, timeStep)
         self.printN = 10
 
         # Params: Figures
@@ -46,7 +52,7 @@ class Functions:
             x = dES + rateR*es
             data['E'].append(x / (rateF * s))
             data['S'].append(x / (rateF * e))
-        data = pd.DataFrame(data)
+        data = pd.DataFrame(data, index=self.time)
         print(f'Concentrations:\n{data}')
         return data
 
