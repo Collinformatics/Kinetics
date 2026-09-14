@@ -10,7 +10,7 @@ import sys
 # Set options
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 1000)
-pd.set_option('display.float_format', '{:,.3f}'.format)
+pd.set_option('display.float_format', '{:,.2e}'.format)
 
 
 def pressKey(event):
@@ -49,9 +49,8 @@ class Functions:
             # Evaluate componets
             dES = (rateF*e*s - rateR*es) * dt
             data['ES'].append(es + dES)
-            x = dES + rateR*es
-            data['E'].append(x / (rateF * s))
-            data['S'].append(x / (rateF * e))
+            data['E'].append(e - dES)
+            data['S'].append(s - dES)
         data = pd.DataFrame(data, index=self.time)
         print(f'Concentrations:\n{data}')
         return data
@@ -62,7 +61,6 @@ class Functions:
         for i in range(data.columns.size):
             ax.plot(data.index, data.iloc[:,i], color=colors[i],
                     label=data.columns[i], linewidth=self.lineThickness)
-
         ax.legend(fontsize=self.labelSizeTicks, loc='best', framealpha=0.8)
 
         # Styling
@@ -70,7 +68,7 @@ class Functions:
         ax.set_xlabel(labelX, fontsize=self.labelSizeAxis)
         ax.set_ylabel(labelY, fontsize=self.labelSizeAxis, labelpad=20, rotation=90)
         ax.tick_params(labelsize=12)
-
+        
         # Grid
         ax.grid(True, linewidth=0.25, color='black')
         ax.spines['top'].set_visible(False)

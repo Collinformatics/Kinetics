@@ -30,11 +30,11 @@ S = 5
 ES = 0
 
 # Input: Rate Constants
-k1 = 5
-k1r = 2 # k₋₁
+k1 = 4**-1
+k1r = 3**-3 # k₋₁
 
 # Input: Reaction Params
-duration = 6 # min
+duration = 15 # min
 step = 0.05 # min
 
 
@@ -50,5 +50,6 @@ data = fn.complexFormation(
 # Plot data
 fn.plotLines(
     data=data, labelX='Time', labelY='Concentration (mol/L)',
-    title='Reaction Kinetics', colors=['black', '#20BB20', '#7700AA']
+    title=f'Reaction Kinetics\nE + S ⇌ ES\nk₁ = {round(k1, 2)}, k₋₁ = {round(k1r, 2)}',
+    colors=['black', '#7700AA', '#20BB20']
 )
