@@ -60,7 +60,7 @@ data = fn.complexFormation(
 
 # Plot data
 fn.plotLines(
-    data=data, labelX='Time (s)', labelY='Concentration (mol/L)',
+    data=data, colors=['black', '#7700AA', '#20BB20'],
     title=f'Reaction Kinetics\nE + S ⇌ ES\nk₁ = {k1:.1e} M/s\nk₋₁ = {k1r:.1e} M/s',
-    colors=['black', '#7700AA', '#20BB20']
+    labelX='Time (s)', labelY='Concentration (mol/L)'
 )

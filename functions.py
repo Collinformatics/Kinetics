@@ -84,12 +84,13 @@ class Functions:
         return data
 
 
-    def plotLines(self, data, labelX, labelY, title, colors):
+    def plotLines(self, data, colors, title, labelX, labelY):
         fig, ax = plt.subplots(figsize=self.figSize)
         for i in range(data.columns.size):
             ax.plot(data.index, data.iloc[:,i], color=colors[i],
                     label=data.columns[i], linewidth=self.lineThickness)
-        ax.legend(fontsize=self.labelSizeTicks, loc='best', edgecolor='black', framealpha=0.8)
+        ax.legend(fontsize=self.labelSizeTicks, loc='best',
+                  edgecolor='black', framealpha=0.8)
 
         # Styling
         ax.set_title(title, fontsize=self.labelSizeTitle, fontweight='bold')
