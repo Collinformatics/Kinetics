@@ -1,4 +1,4 @@
-from functions import ODE
+from functions import Functions
 import math
 import numpy as np
 import sys

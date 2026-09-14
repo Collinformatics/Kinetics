@@ -14,7 +14,7 @@ def pressKey(event):
         os.execl(python, python, *sys.argv)
 
 
-class ODE:
+class Functions:
     def __init__(self):
         self.printN = 10
 
