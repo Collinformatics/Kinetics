@@ -44,7 +44,7 @@ vol = 1 # Volume (L)
 
 # ========================================================================================
 # Initalize class
-fn = Functions(duration=duration, timestep=step)
+fn = Functions(duration=duration, timeStep=step)
 
 # Run reactions
 data = fn.complexFormation(

@@ -18,9 +18,8 @@ def pressKey(event):
 
 
 class Functions:
-    def __init__(self, duration, timestep):
-        self.time = 0
-        self.getTime(duration, timestep)
+    def __init__(self, duration, timeStep):
+        self.time = [t for t in range(0, duration+timeStep, timeStep)]
         self.printN = 10
 
         # Params: Figures
@@ -34,32 +33,21 @@ class Functions:
         self.figureResolution = 600
 
 
-    def getTime(self, duration, timeStep):
-        time = [t for t in range(0, duration+timeStep, timeStep)]
-        if len(time) % 2 != 0:
-            time = time[0:len(time)-1]
-        self.time = time
-
-
     def complexFormation(self, concE, concS, concES, rateF, rateR):
         data = {'E': [concE], 'S': [concS], 'ES': [concES]}
-        print(f'Time: {self.time}')
-        for i in range(0, len(self.time), 2):
+        for i in range(0, len(self.time)-1, 1):
             e, s, es = data['E'][-1], data['S'][-1], data['ES'][-1]
             t1, t2 = self.time[i], self.time[i+1]
             dt = t2 - t1
-            print(f'dt = {t2}-{t1} = {dt}')
 
             # Evaluate componets
-            dES = (rateF*e*s - rateR*s) * dt
+            dES = (rateF*e*s - rateR*es) * dt
             data['ES'].append(es + dES)
             x = dES + rateR*es
             data['E'].append(x / (rateF * s))
             data['S'].append(x / (rateF * e))
-
         data = pd.DataFrame(data)
-        print(f'\nConcentrations:\n{data}')
-        print(f'{data.columns.size}')
+        print(f'Concentrations:\n{data}')
         return data
 
 
