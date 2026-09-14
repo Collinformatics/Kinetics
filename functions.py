@@ -10,7 +10,7 @@ import sys
 # Set options
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 1000)
-pd.set_option('display.float_format', '{:,.2e}'.format)
+pd.set_option('display.float_format', '{:,.2f}'.format)
 
 
 def pressKey(event):
@@ -68,7 +68,7 @@ class Functions:
         ax.set_xlabel(labelX, fontsize=self.labelSizeAxis)
         ax.set_ylabel(labelY, fontsize=self.labelSizeAxis, labelpad=20, rotation=90)
         ax.tick_params(labelsize=12)
-        
+
         # Grid
         ax.grid(True, linewidth=0.25, color='black')
         ax.spines['top'].set_visible(False)
