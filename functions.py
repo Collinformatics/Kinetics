@@ -1,6 +1,8 @@
 import os
+import math
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 import sys
 
 
@@ -27,6 +29,27 @@ class Functions:
         self.lineThickness = 1.5
         self.tickLength = 4
         self.figureResolution = 600
+
+
+    @staticmethod
+    def firstOrderRxn(conc, times, rateCst, numProd=1):
+        l = len(conc)
+        data = []
+        for i, c in enumerate(conc):
+            conc_0 = conc[i]
+            x = []
+            sign = -1
+            if i >= l-numProd:
+                concA_0 = conc[0]
+                for t in times:
+                    conc_t = concA_0 * (1 - math.exp(-rateCst*t))
+                    x.append(conc_t)
+            else:
+                for t in times:
+                    conc_t = math.exp(np.log(conc_0) + (-rateCst*t))
+                    x.append(conc_t)
+            data.append(x)
+        return data
 
 
     def plotLines(self, data, labelX, labelY, title, lineSets):
