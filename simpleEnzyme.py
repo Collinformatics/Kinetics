@@ -12,45 +12,51 @@ import sys
     
     For the first step, ES formation is time dependant:
     
-        ∆[ES] / ∆t = k₁[E][S] - k₂[ES]
+        ∆[ES] / ∆t = k₁[E][S] - k₋₁[ES]
     
         where k₁ and k₂ are the respective forward and reverse rate constants.
     
-    
+"""
+"""
+    k₂
 """
 
 
 ## ***** Inputs *****
 
 # Input: Initital Concentrations
-A = 4 # ConcA (mol/L)
-B = 5
-C = 0
+E = 4 # ConcA (mol/L)
+S = 5
+ES = 0
+
+# Input: Rate Constants
+k1 = 5
+k1r = 2 # k₋₁
 
 # Input: Reaction Params
-duration = 20 # min
+duration = 6 # min
 step = 1 # min
 time = [t for t in range(0, duration+step, step)]
 k = 0.4 # Rate cst (1/s)
 vol = 1 # Volume (L)
-a = 1
-b = 1
-c = 1
+
 
 
 # ========================================================================================
 # Initalize class
-fn = Functions()
-
+fn = Functions(duration=duration, timestep=step)
 
 # Run reactions
-concA, concB, concC = fn.firstOrderRxn([A, B, C], times=time, rateCst=k)
-print(concC)
+data = fn.complexFormation(
+    concE=E, concS=S, concES=ES, rateF=k1, rateR=k1r
+)
+concE = data['E']
+concS = data['S']
+concES = data['ES']
 
-
+# Plot data
 fn.plotLines(
-    data=(time, concC, 'Product C'), labelX='Time', labelY='y(t)',
-    title='Reaction Kinetics', lineSets=[(time, concA, 'Reactant A', '#20BB20', '-', ''),
-                                         (time, concB, 'Reactant B', '#7700AA', '-', '')]
+    data=data, labelX='Time', labelY='Concentration (mol/L)',
+    title='Reaction Kinetics', colors=['black', '#20BB20', '#7700AA']
 )
 

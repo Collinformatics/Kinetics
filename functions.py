@@ -3,6 +3,7 @@ import math
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import sys
 
 
@@ -17,7 +18,9 @@ def pressKey(event):
 
 
 class Functions:
-    def __init__(self):
+    def __init__(self, duration, timestep):
+        self.time = 0
+        self.getTime(duration, timestep)
         self.printN = 10
 
         # Params: Figures
@@ -31,42 +34,47 @@ class Functions:
         self.figureResolution = 600
 
 
-    @staticmethod
-    def firstOrderRxn(conc, times, rateCst, numProd=1):
-        l = len(conc)
-        data = []
-        for i, c in enumerate(conc):
-            conc_0 = conc[i]
-            x = []
-            sign = -1
-            if i >= l-numProd:
-                concA_0 = conc[0]
-                for t in times:
-                    conc_t = concA_0 * (1 - math.exp(-rateCst*t))
-                    x.append(conc_t)
-            else:
-                for t in times:
-                    conc_t = math.exp(np.log(conc_0) + (-rateCst*t))
-                    x.append(conc_t)
-            data.append(x)
+    def getTime(self, duration, timeStep):
+        time = [t for t in range(0, duration+timeStep, timeStep)]
+        if len(time) % 2 != 0:
+            time = time[0:len(time)-1]
+        self.time = time
+
+
+    def complexFormation(self, concE, concS, concES, rateF, rateR):
+        data = {'E': [concE], 'S': [concS], 'ES': [concES]}
+        print(f'Time: {self.time}')
+        for i in range(0, len(self.time), 2):
+            e, s, es = data['E'][-1], data['S'][-1], data['ES'][-1]
+            t1, t2 = self.time[i], self.time[i+1]
+            dt = t2 - t1
+            print(f'dt = {t2}-{t1} = {dt}')
+
+            # Evaluate componets
+            dES = (rateF*e*s - rateR*s) * dt
+            data['ES'].append(es + dES)
+            x = dES + rateR*es
+            data['E'].append(x / (rateF * s))
+            data['S'].append(x / (rateF * e))
+
+        data = pd.DataFrame(data)
+        print(f'\nConcentrations:\n{data}')
+        print(f'{data.columns.size}')
         return data
 
 
-    def plotLines(self, data, labelX, labelY, title, lineSets):
-        t1, y1, label = data
-
+    def plotLines(self, data, labelX, labelY, title, colors):
         fig, ax = plt.subplots(figsize=self.figSize)
-        ax.plot(t1, y1, color='#101010', linewidth=self.lineThickness, label=label)
-        for t2, y2, label2, color, linestyle, marker in lineSets:
-            ax.plot(t2, y2, color=color, linewidth=self.lineThickness,
-                    linestyle=linestyle, label=label2)
-            ax.scatter(t2, y2, marker=marker, s=20, color=color, zorder=5)
+        for i in range(data.columns.size):
+            ax.plot(data.index, data.iloc[:,i], color=colors[i],
+                    label=data.columns[i], linewidth=self.lineThickness)
+
         ax.legend(fontsize=self.labelSizeTicks, loc='best', framealpha=0.8)
 
         # Styling
         ax.set_title(title, fontsize=self.labelSizeTitle, fontweight='bold')
         ax.set_xlabel(labelX, fontsize=self.labelSizeAxis)
-        ax.set_ylabel(labelY, fontsize=self.labelSizeAxis, rotation=0, labelpad=20)
+        ax.set_ylabel(labelY, fontsize=self.labelSizeAxis, labelpad=20, rotation=90)
         ax.tick_params(labelsize=12)
 
         # Grid
